@@ -6,6 +6,7 @@ import { LoginComponent } from './lib/component/login/login.component';
 import { WSO2_CONFIG } from './lib/service/authentication.service';
 import { NgxWso2HttpInterceptor } from './lib/interceptor/authentication.interceptor';
 import { NgxWso2AuthenticationGuard } from './lib/guard/authentication.guard';
+import { HasPermissionDirective } from './lib/directive/hasPermission.directive';
 
 // Services
 export * from './lib/service/authentication.service';
@@ -19,6 +20,9 @@ export * from './lib/interceptor/authentication.interceptor';
 // Guards
 export * from './lib/guard/authentication.guard';
 
+// Directivers
+export * from './lib/directive/hasPermission.directive';
+
 export interface NgxWso2Config {
   authorizeUri: string;
   clientId: string;
@@ -26,6 +30,7 @@ export interface NgxWso2Config {
   storageName: string;
   clientSecret: string;
   tokenUri: string;
+  userDataUri?: string;
 }
 
 @NgModule({
@@ -34,11 +39,13 @@ export interface NgxWso2Config {
     HttpClientModule,
   ],
   declarations: [
-    LoginComponent
+    LoginComponent,
+    HasPermissionDirective
   ],
   exports: [
     HttpClientModule,
-    LoginComponent
+    LoginComponent,
+    HasPermissionDirective
   ]
 })
 export class NgxWso2AuthenticationModule {

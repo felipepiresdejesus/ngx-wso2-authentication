@@ -17,9 +17,6 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    console.log('intercepted');
-
     if (req.url === this.config.tokenUri) {
       return next.handle(req);
     }

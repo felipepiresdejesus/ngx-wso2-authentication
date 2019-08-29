@@ -4,13 +4,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "lib",
+      "ngx-wso2",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "lib",
+      "ngx-wso2",
       "kebab-case"
     ]
   }

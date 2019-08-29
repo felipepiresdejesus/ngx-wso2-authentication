@@ -3,9 +3,10 @@ export const environment = {
   wso2: {
     authorizeUri: '',
     clientId: '',
-    redirectUri: encodeURIComponent('http://localhost:4200/#/login'),
+    redirectUri: 'http://localhost:4200/#/login',
     storageName: 'Wso2AuthenticationToken',
     clientSecret: '',
-    tokenUri: ''
+    tokenUri: '',
+    userDataUri: ''
   }
 };

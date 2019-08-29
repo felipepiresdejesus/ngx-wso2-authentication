@@ -6,15 +6,18 @@ import { NgxWso2AuthenticationService } from '../service/authentication.service'
 export class NgxWso2AuthenticationGuard implements CanActivate {
 
   constructor(private router: Router, private service: NgxWso2AuthenticationService) {
-    console.log(this.router);
-    console.log(this.service);
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.service.isLogged) {
-      return true;
-    }
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    const expectedRole = route.data.expectedRole;
 
+    if (this.service.isLogged) {
+      if (expectedRole != null) {
+        return await this.service.hasRole(expectedRole);
+      } else {
+        return true;
+      }
+    }
     this.router.navigate(['login']);
     return false;
   }

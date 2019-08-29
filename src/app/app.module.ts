@@ -15,14 +15,7 @@ import { HomeComponent } from './components/home/home.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxWso2AuthenticationModule.forRoot({
-      authorizeUri: environment.wso2.authorizeUri,
-      clientId: environment.wso2.clientId,
-      redirectUri: environment.wso2.redirectUri,
-      storageName: environment.wso2.storageName,
-      clientSecret: environment.wso2.clientSecret,
-      tokenUri: environment.wso2.tokenUri
-    })
+    NgxWso2AuthenticationModule.forRoot(environment.wso2)
   ],
   providers: [
   ],

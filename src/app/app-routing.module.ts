@@ -4,7 +4,7 @@ import { LoginComponent, NgxWso2AuthenticationGuard } from 'ngx-wso2-authenticat
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [NgxWso2AuthenticationGuard] },
+  { path: '', component: HomeComponent, canActivate: [NgxWso2AuthenticationGuard], data: { expectedRole: 'Admin' } },
   { path: 'login', component: LoginComponent }
 ];
 
