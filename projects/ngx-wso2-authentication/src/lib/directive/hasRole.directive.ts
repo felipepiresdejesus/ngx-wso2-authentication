@@ -5,7 +5,7 @@ import { NgxWso2AuthenticationService } from '../service/authentication.service'
   // tslint:disable-next-line: directive-selector
   selector: '[ngxHasRole]'
 })
-export class HasPermissionDirective implements OnInit {
+export class HasRoleDirective implements OnInit {
 
   constructor(private el: ElementRef,
               private viewContainer: ViewContainerRef,

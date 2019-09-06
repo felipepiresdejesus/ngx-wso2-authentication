@@ -13,12 +13,19 @@ export class NgxWso2AuthenticationGuard implements CanActivate {
 
     if (this.service.isLogged) {
       if (expectedRole != null) {
-        return await this.service.hasRole(expectedRole);
+        const hasAccess = await this.service.hasRole(expectedRole);
+        if (hasAccess) {
+          return true;
+        } else {
+          this.router.navigate(['access-denied']);
+        }
       } else {
         return true;
       }
+    } else {
+      this.router.navigate(['login']);
     }
-    this.router.navigate(['login']);
+
     return false;
   }
 

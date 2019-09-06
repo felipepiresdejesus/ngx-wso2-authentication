@@ -3,16 +3,20 @@ import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { LoginComponent } from './lib/component/login/login.component';
+import { AccessDeniedComponent } from './lib/component/access-denied/access-denied.component';
+
 import { WSO2_CONFIG } from './lib/service/authentication.service';
 import { NgxWso2HttpInterceptor } from './lib/interceptor/authentication.interceptor';
 import { NgxWso2AuthenticationGuard } from './lib/guard/authentication.guard';
-import { HasPermissionDirective } from './lib/directive/hasPermission.directive';
+import { HasRoleDirective } from './lib/directive/hasRole.directive';
+
 
 // Services
 export * from './lib/service/authentication.service';
 
 // Components
 export * from './lib/component/login/login.component';
+export * from './lib/component/access-denied/access-denied.component';
 
 // Interceptors
 export * from './lib/interceptor/authentication.interceptor';
@@ -21,7 +25,7 @@ export * from './lib/interceptor/authentication.interceptor';
 export * from './lib/guard/authentication.guard';
 
 // Directivers
-export * from './lib/directive/hasPermission.directive';
+export * from './lib/directive/hasRole.directive';
 
 export interface NgxWso2Config {
   authorizeUri: string;
@@ -40,12 +44,13 @@ export interface NgxWso2Config {
   ],
   declarations: [
     LoginComponent,
-    HasPermissionDirective
+    HasRoleDirective,
+    AccessDeniedComponent
   ],
   exports: [
     HttpClientModule,
     LoginComponent,
-    HasPermissionDirective
+    HasRoleDirective
   ]
 })
 export class NgxWso2AuthenticationModule {
