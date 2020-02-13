@@ -41,14 +41,17 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
   private refreshToken(request: HttpRequest<any>, next: HttpHandler): Observable<any> | undefined {
     if (!this.isRefreshingToken) {
       this.isRefreshingToken = true;
-      this.tokenSubject.next('');
+
+      // Reset here so that the following requests wait until the token
+      // comes back from the refreshToken call.
+      this.tokenSubject.next(null);
 
       return this.authService.refreshToken().pipe(
         switchMap((token: NgxWso2Token) => {
           if (token != null) {
             this.authService.saveAccessToken(token);
             this.tokenSubject.next(token.access_token || '');
-            return of(next.handle(this.addToken(request, token.access_token || '')));
+            return next.handle(this.addToken(request, token.access_token || ''));
           }
           this.authService.logout();
         }),

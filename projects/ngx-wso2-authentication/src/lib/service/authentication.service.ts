@@ -40,7 +40,7 @@ export class NgxWso2AuthenticationService {
   /// Save access token in local storage
   public saveAccessToken(token: NgxWso2Token): void {
     const sysdate = new Date();
-    sysdate.setSeconds(sysdate.getSeconds() + (token.expires_in || 120));
+    sysdate.setSeconds(sysdate.getSeconds() + ((token.expires_in - 10) || 120));
     token.expires_date = sysdate;
     localStorage.setItem(this.config.storageName, JSON.stringify(token));
   }
@@ -111,7 +111,7 @@ export class NgxWso2AuthenticationService {
   /// Check if token is expired
   public get isExpired(): boolean {
     const sysdate = new Date();
-    sysdate.setSeconds(sysdate.getSeconds() + 10);
+    sysdate.setSeconds(sysdate.getSeconds());
     return this.tokenStorage && sysdate > new Date(this.tokenStorage.expires_date || sysdate);
   }
 
