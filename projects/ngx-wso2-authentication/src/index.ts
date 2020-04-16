@@ -27,6 +27,10 @@ export * from './lib/guard/authentication.guard';
 // Directivers
 export * from './lib/directive/hasRole.directive';
 
+// Models
+export * from './lib/model/token.model';
+export * from './lib/model/user.model';
+
 export interface NgxWso2Config {
   authorizeUri: string;
   clientId: string;

@@ -4,7 +4,9 @@ import { LoginComponent, NgxWso2AuthenticationGuard, AccessDeniedComponent } fro
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, canActivate: [NgxWso2AuthenticationGuard], data: { expectedRole: 'Users_WTS2K_SLA_POPMUSYSACE' } },
+  //{ path: '', component: HomeComponent, canActivate: [NgxWso2AuthenticationGuard], data: { expectedRole: '' } },
+  { path: '', component: HomeComponent, canActivate: [NgxWso2AuthenticationGuard]  },
+
   { path: 'login', component: LoginComponent },
   { path: 'access-denied', component: AccessDeniedComponent }
 ];

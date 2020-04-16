@@ -1,11 +1,10 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { finalize, switchMap } from 'rxjs/operators';
+import { finalize, switchMap, catchError } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { NgxWso2AuthenticationService, WSO2_CONFIG } from '../service/authentication.service';
 import { NgxWso2Config } from '../..';
 import { NgxWso2Token } from '../model/token.model';
-
 @Injectable()
 export class NgxWso2HttpInterceptor implements HttpInterceptor {
 
@@ -13,7 +12,7 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
   private tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(@Inject(WSO2_CONFIG) private config: NgxWso2Config,
-              private authService: NgxWso2AuthenticationService) {
+    private authService: NgxWso2AuthenticationService) {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -22,6 +21,7 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
     }
 
     if (this.authService.isExpired) {
+
       return this.refreshToken(req, next);
     }
 
@@ -36,7 +36,11 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
       },
     });
   }
-
+  private handleError(error) { 
+    let errMsg: string;
+    this.authService.logout();
+    this.authService.redirectToLoginPage();
+  }
   /// Refresh access token when is expired
   private refreshToken(request: HttpRequest<any>, next: HttpHandler): Observable<any> | undefined {
     if (!this.isRefreshingToken) {
@@ -45,8 +49,9 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
       // Reset here so that the following requests wait until the token
       // comes back from the refreshToken call.
       this.tokenSubject.next(null);
-
       return this.authService.refreshToken().pipe(
+
+
         switchMap((token: NgxWso2Token) => {
           if (token != null) {
             this.authService.saveAccessToken(token);
@@ -55,6 +60,8 @@ export class NgxWso2HttpInterceptor implements HttpInterceptor {
           }
           this.authService.logout();
         }),
+        catchError(this.handleError.bind(this))
+        ,
         finalize(() => {
           this.isRefreshingToken = false;
         }),
