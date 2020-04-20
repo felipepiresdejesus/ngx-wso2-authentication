@@ -4,7 +4,8 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NgxWso2Token } from '../model/token.model';
 import { User } from '../model/user.model';
-import { retry } from 'rxjs/operators';
+import { retry, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 export const WSO2_CONFIG = new InjectionToken('WSO2_CONFIG');
 
@@ -14,7 +15,8 @@ export const WSO2_CONFIG = new InjectionToken('WSO2_CONFIG');
 export class NgxWso2AuthenticationService {
 
   constructor(@Inject(WSO2_CONFIG) private config: NgxWso2Config,
-              private http: HttpClient) { }
+    private http: HttpClient,
+    private router: Router) { }
 
   /// Returns access token as object
   private get tokenStorage(): NgxWso2Token {
@@ -91,6 +93,11 @@ export class NgxWso2AuthenticationService {
     localStorage.removeItem(this.config.storageName);
   }
 
+  /// Redirects back to the login page
+  public redirectToLoginPage() {
+    this.router.navigate(['login']);
+  }
+
   /// Update access token using refresh token
   public refreshToken(): Observable<NgxWso2Token> {
     const body = `grant_type=refresh_token` +
@@ -105,7 +112,9 @@ export class NgxWso2AuthenticationService {
     return this
       .http
       // tslint:disable-next-line: object-literal-shorthand
-      .post<NgxWso2Token>(this.config.tokenUri, body, { headers: headers });
+      .post<NgxWso2Token>(this.config.tokenUri, body, { headers: headers })
+      .pipe(retry(3))
+
   }
 
   /// Check if token is expired
